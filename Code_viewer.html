@@ -118,7 +118,15 @@
 </head>
 <body>
 
-<div class="card">
+<div class="card" id="pinGate">
+  <div class="eyebrow">Elite Gems &amp; Jewellery</div>
+  <h1>Enter PIN</h1>
+  <input type="text" id="pinInput" placeholder="PIN" autocomplete="off" style="width:100%;background:#16161a;border:1px solid var(--hairline);color:var(--porcelain);font-family:'Jost',sans-serif;font-size:15px;padding:13px 16px;text-align:center;outline:none;margin-bottom:14px;">
+  <button class="copy-btn" id="pinSubmitBtn">Unlock</button>
+  <div class="hint" id="pinError" style="display:none;color:#d98a8a;">Incorrect PIN.</div>
+</div>
+
+<div class="card" id="codeCard" style="display:none;">
   <div class="eyebrow">Elite Gems &amp; Jewellery</div>
   <h1>Current Access Code</h1>
 
@@ -133,6 +141,40 @@
 
   <div class="hint">This page is private — bookmark it for yourself only.<br>Do not share this link, only the code shown above.</div>
 </div>
+
+<script>
+  const PIN_CODE = "Wontgetit";
+  const pinGate = document.getElementById('pinGate');
+  const codeCard = document.getElementById('codeCard');
+  const pinInput = document.getElementById('pinInput');
+  const pinSubmitBtn = document.getElementById('pinSubmitBtn');
+  const pinError = document.getElementById('pinError');
+
+  function unlockPin(){
+    pinGate.style.display = 'none';
+    codeCard.style.display = 'block';
+    sessionStorage.setItem('eliteGemsPinUnlocked', 'true');
+  }
+
+  function checkPin(){
+    if (pinInput.value === PIN_CODE) {
+      unlockPin();
+    } else {
+      pinError.style.display = 'block';
+      pinInput.value = '';
+      pinInput.focus();
+    }
+  }
+
+  if (sessionStorage.getItem('eliteGemsPinUnlocked') === 'true') {
+    unlockPin();
+  }
+
+  pinSubmitBtn.addEventListener('click', checkPin);
+  pinInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') checkPin();
+  });
+</script>
 
 <script>
   function sha1(msgBytes) {
